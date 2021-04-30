@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+encoding//WebRoot/WEB-INF/lib=UTF-8
+encoding//src/com/ServiceImpl/JueseServiceImpl.java=UTF-8
+encoding//src/com/ServiceImpl/MenuServiceImpl.java=UTF-8
+encoding//src/com/ServiceImpl/MeunServiceImpl.java=UTF-8
+encoding//src/com/ServiceImpl/UserServiceImpl.java=UTF-8
+encoding//src/com/dao/BaseDao.java=UTF-8
+encoding//src/com/dao/JueseDao.java=UTF-8
+encoding//src/com/dao/MeunDao.java=UTF-8
+encoding//src/com/daoImpl/DengLuDaoImpl.java=UTF-8
+encoding//src/com/daoImpl/MeunDaoImpl.java=UTF-8
