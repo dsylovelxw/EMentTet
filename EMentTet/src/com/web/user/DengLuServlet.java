@@ -38,20 +38,21 @@ public class DengLuServlet extends AbstractServlet{
 		User user= new DengluServiceImpl().DengluName(loginName);
 	
 		if (user == null) {
-			// ÅĞ¶Ï¸ÃÓÃ»§ÊÇ·ñ×¢²á£¡£¡
-			return result.returnFail("ÓÃ»§²»´æÔÚ");
+			// ï¿½Ğ¶Ï¸ï¿½ï¿½Ã»ï¿½ï¿½Ç·ï¿½×¢ï¿½á£¡ï¿½ï¿½
+			return result.returnFail("ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		} else {
-			// ×¢²áÁËÅĞ¶ÏÓÃ»§ÊÇ·ñÊäÈëÕıÈ·ÃÜÂë£¡
+			// ×¢ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½ï¿½Ã»ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½ë£¡
 			if (user.getUserCode().equals(loginName) && user.getUserPassword()==password) {
-				// µÇÂ½³É¹¦£¡ÕËºÅÃÜÂëÆ¥Åä£¡£¡
+				// ï¿½ï¿½Â½ï¿½É¹ï¿½ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½ï¿½ï¿½Æ¥ï¿½ä£¡ï¿½ï¿½
 				
 				  List<Meun> de=new MeunServiceImpl().DengluUser(Integer.valueOf(user.getLode_id()));
 				 request.getSession().setAttribute("user", user);
 				  request.getSession().setAttribute("de", de);
-				 
-				return result.returnSuccess("µÇÂ½³É¹¦");
+				  request.getSession().setAttribute("userid", user.getId());  //åœ¨sessionå­˜å‚¨ç”¨æˆ·ID
+				  request.getSession().setAttribute("lodeid", user.getLode_id()); //åœ¨sessionå­˜å‚¨è§’è‰²id
+				return result.returnSuccess("ï¿½ï¿½Â½ï¿½É¹ï¿½");
 			} else {
-				return result.returnFail("ÊäÈëµÄÓÃ»§Ãû»òÃÜÂë´íÎó");
+				return result.returnFail("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 			}
 		
 		}
