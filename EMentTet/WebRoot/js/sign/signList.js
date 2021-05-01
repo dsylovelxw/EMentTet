@@ -60,16 +60,16 @@ layui.extend({
 	    		url:"SignServlet?action=isSgin",
 	    		type:"post",
 	    		success:function(data){
-	    			  /*var info = eval("("+data+")");*/
-	    			alert(data);
-	    			if(data == 1){
+	    			  var info = eval("("+data+")");
+	    			/*alert(info.data);*/
+	    			if(info.data == 1){
 	    				layer.msg("签到成功！")
 	    				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
 	    				parent.layer.close(index); //再执行关闭
 	    				parent.layui.table.reload("demmmm");
-	    			}else if(data==2){
-	    				layer.msg("您已签到！")
-	    			}else if(data==0){
+	    			}else if(info.data==2){
+	    				layer.msg("您当天已签到！")
+	    			}else if(info.data==0){
 	    				layer.msg("签到失败！")
 	    			}
 	    		}
