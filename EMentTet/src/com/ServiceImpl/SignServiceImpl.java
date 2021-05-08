@@ -22,13 +22,13 @@ public class SignServiceImpl implements SignService{
 	 * 签到列表
 	 */
 	@Override
-	public List<User> getUsers() {
+	public List<User> getUsers(int userid,int lodeid) {
 		// TODO Auto-generated method stub
 		Connection conn = null;
 		List<User> list = null;
 		try {
 			conn = DataBaseUtil.getConnection();
-			list = new SignDaoImpl(conn).getUsers();
+			list = new SignDaoImpl(conn).getUsers(userid,lodeid);
 		} catch (Exception e) {
 			// TODO: handle exception
 			LOGGER.error(e.getMessage());

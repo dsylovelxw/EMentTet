@@ -30,14 +30,21 @@ public class SignDaoImpl extends BaseDao implements SignDao {
 	 * 签到列表
 	 */
 	@Override
-	public List<User> getUsers() {
+	public List<User> getUsers(int userid,int lodeid) {
 		// TODO Auto-generated method stub
 		// 创建字符集
 		ResultSet set = null;
 		List<User> list = new ArrayList<User>();
+		String sql="";
 		// sql语句
-		String sql = " SELECT `id`,`userCode`,`userName`,`userPassword`,`gender`,`birthday`,`phone`,`address`,`bumeng_id`,`age`,`zhicheng_id`,`lode_id` FROM `lr_user` WHERE `lode_id` !=1 AND `lode_id` !=2";
-		set = super.excuteQuery(sql, null);
+		if (lodeid!=3) {
+		 sql = " SELECT `id`,`userCode`,`userName`,`userPassword`,`gender`,`birthday`,`phone`,`address`,`bumeng_id`,`age`,`zhicheng_id`,`lode_id` FROM `lr_user` WHERE `lode_id` !=1 AND `lode_id` !=2";
+		 set = super.excuteQuery(sql, null);
+		}else {
+			sql = " SELECT `id`,`userCode`,`userName`,`userPassword`,`gender`,`birthday`,`phone`,`address`,`bumeng_id`,`age`,`zhicheng_id`,`lode_id` FROM `lr_user` WHERE `lode_id` !=1 AND `lode_id` !=2 AND `id`=?";
+			Object[]objects={userid};
+			set = super.excuteQuery(sql, objects);
+		}
 		try {
 			while (set.next()) {
 				User user = new User();
@@ -52,10 +59,12 @@ public class SignDaoImpl extends BaseDao implements SignDao {
 				user.setAge(set.getInt(10));
 				user.setZhicheng_id(set.getString(11));
 				user.setLode_id(set.getString(12));
-				user.setSoignid(signCount(user.getId())); // 获取是否签到
-				user.setDate(getDate(user.getId())); // 获取签到日期
+				  int signid=signCount(user.getId()); 
+ 				  String date=getDate(user.getId());
+				  user.setSoignid(signid); // 获取是否签到 
+				  user.setDate(date); // 获取签到日期
 				list.add(user);
-			}
+			}	
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,9 +103,12 @@ public class SignDaoImpl extends BaseDao implements SignDao {
 		ResultSet rs = null;
 		int count = -1;
 		try {
-			String sql = " SELECT COUNT(*) FROM `lr_sign` WHERE  `userid`=?";
+			String sql = "  SELECT COUNT(*) FROM `lr_sign` WHERE `signTime`=CURDATE() AND `userid`=?";
 			Object[] obj = {userid};
-			count = excuteUpdate(sql, obj);
+			rs=excuteQuery(sql, obj);
+			while (rs.next()) {
+				count=rs.getInt(1);
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			LOGGER.error(e.getMessage());
@@ -116,8 +128,8 @@ public class SignDaoImpl extends BaseDao implements SignDao {
 		String date = null;
 		try {
 			String sql = " SELECT `signTime` FROM `lr_sign` WHERE signTime =CURDATE() AND `userid` =?";
-			rs = super.excuteQuery(sql, null);
 			Object[] obj = {userid};
+			rs = super.excuteQuery(sql, obj);
 			if (rs!=null) {
 			while (rs.next()) {
 			date=rs.getString(1);	

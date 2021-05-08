@@ -18,7 +18,7 @@ public interface SignService {
 	/*
 	 * 签到类表
 	 */
-	public List<User> getUsers();
+	public List<User> getUsers(int userid,int lodeid);
 	
 	/*
 	 * 我要签到

@@ -26,7 +26,7 @@ layui.extend({
             {field: 'phone', title: '学生手机号', minWidth:100, align:"center"},
             {field: 'address', title: '学生住址', minWidth:100, align:"center"},
             {field: 'soignid', title: '是否签到', align:'center',templet:function(d){
-                return d.isStatus == "0" ? "<span class='layui-badge layui-bg-green'>正常</span>" : "<span class='layui-badge layui-bg-red'>冻结</span>";
+                return d.soignid == "0" ? "<span class='layui-badge layui-bg-red'>未签到</span>" : "<span class='layui-badge layui-bg-green'>已签到</span>";
             }},
             {field: 'date', title: '签到日期', minWidth:100, align:"center"},
         ]]
@@ -45,13 +45,8 @@ layui.extend({
 	    }
 	    
 	    switch(obj.event){
-	      case 'fenFunc':	//分配角色
-				if(data.length == 0 || data.length > 1){
-					layer.msg("请选择一行数据进行操作")
-					return ;
-				}else{
-					hairMenu(userid);
-				}
+	      case 'addFunc':	//我要签到
+	    	  addSign();
 	      break;
 	  
 	    };
@@ -59,72 +54,27 @@ layui.extend({
     
   
     
-	//分配角色
-	    function hairMenu(userid){
-	    	 
-	    	layui.layer.open({
-	    		title : "分配角色",
-	    		type : 1,
-	    		content : $('#dtree1'),
-	    		area:['300px','500px'],
-	    		success:function(){
-	    		    //给dtree树加载数据
-	    			
-	    			dtree.render({
-					  elem: "#dataTree3",
-					  url: "/EMentTet/QuanServletInterface?action=allMenuDtree",
-					  dataStyle: "layuiStyle",  //使用layui风格的数据格式
-				  dataFormat: "list",  //配置data的风格为list
-					  response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
-					  checkbar:true,
-					  line: true,  // 显示树线
-					  done: function(res, $ul, first){
-						  
-						  $.ajax({
-							  url:"/EMentTet/QuanServletInterface?action=menuByUseridType1",
-							  type:"post",
-							  data:{"userid":userid},
-							  success:function(res){
-								  
-								  var cs = eval('(' + res + ')');
-								  $.each(cs,function(index,row){
-									dtree.chooseDataInit("dataTree3",[row.id]); // 初始化选中
-								  })
-							  }
-						  })
-	  		    	  }
-	    			});
-	    		} ,
-	    	 btn:['分配角色'],
-	    		yes: function(index, layero){
-	    			var params = dtree.getCheckbarNodesParam("dataTree3");
-	    			var infos = JSON.stringify(params);
-	    			var cs = eval('(' + infos + ')');
-	    			var menuidList = new Array();	//所有选中值的权限id
-	    			//alert(menuidList.length);
-	    			$.each(cs,function(index,row){
-						menuidList[index] = row.nodeId;
-	    			})
-	    			$.ajax({
-	    				url:"/EMentTet/QuanServletInterface?action=menuByUserid",
-	    				data:{"array":menuidList,"userid":userid},
-	    				type:"post",
-	    				traditional:true,
-	    				success:function(data){
-	    					var demo = eval('(' + data + ')');
-	    					if(demo.status == 1){
-	    						layer.msg(demo.message);
-	    						layer.close(index)	//关闭
-	    					}else{
-	    						layer.msg("分配失败");
-	    					}
-	    				}
-	    			})
-	    		}  
+	  //我要签到
+	    function addSign(){
+	    	$.ajax({
+	    		url:"SignServlet?action=isSgin",
+	    		type:"post",
+	    		success:function(data){
+	    			  var info = eval("("+data+")");
+	    			/*alert(info.data);*/
+	    			if(info.data == 1){
+	    				layer.msg("签到成功！")
+	    				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+	    				parent.layer.close(index); //再执行关闭
+	    				parent.layui.table.reload("demmmm");
+	    			}else if(info.data==2){
+	    				layer.msg("您当天已签到！")
+	    			}else if(info.data==0){
+	    				layer.msg("签到失败！")
+	    			}
+	    		}
 	    	})
 	    }
-  
-    
      
 
 })

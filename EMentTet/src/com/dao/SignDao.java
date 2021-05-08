@@ -20,7 +20,7 @@ public interface SignDao{
 	/*
 	 * 签到类表
 	 */
-	public List<User> getUsers();
+	public List<User> getUsers(int lodeid,int userid);
 	
 	/*
 	 * 我要签到
